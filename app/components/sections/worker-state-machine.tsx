@@ -1,0 +1,59 @@
+"use client";
+
+import SectionWrapper from "@/app/components/section-wrapper";
+import MermaidDiagram from "@/app/components/mermaid-diagram";
+
+const chart = `stateDiagram-v2
+  [*] --> idle
+  idle --> loading: skill_requested
+  loading --> planning: context_loaded
+  loading --> error: load_failed
+  planning --> executing: plan_ready
+  executing --> verifying: execution_done
+  executing --> error: execution_failed
+  verifying --> post_hook: verification_passed
+  verifying --> error: verification_failed
+  post_hook --> completed: hook_complete
+  error --> loading: retry
+  error --> completed: max_retries
+  completed --> [*]`;
+
+const states = [
+  { name: "idle", description: "Worker registered, awaiting invocation" },
+  { name: "loading", description: "Loading context from knowledge bases and worker.yaml" },
+  { name: "planning", description: "Analyzing task, determining approach" },
+  { name: "executing", description: "Performing the skill — writing code, generating reports" },
+  { name: "verifying", description: "Running typecheck, build, tests — back pressure gate" },
+  { name: "post_hook", description: "Auto-checkpoint, metrics logging, thread save" },
+  { name: "completed", description: "Task done, output delivered, state persisted" },
+  { name: "error", description: "Failure caught — can retry or escalate" },
+];
+
+export default function WorkerStateMachineSection() {
+  return (
+    <SectionWrapper
+      id="state-machine"
+      badge="LIFECYCLE"
+      title="Worker State Machine"
+      subtitle="Every worker follows the same lifecycle: load context, plan, execute, verify, checkpoint."
+    >
+      <MermaidDiagram chart={chart} />
+
+      <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+        {states.map((state) => (
+          <div
+            key={state.name}
+            className="rounded-lg border border-border bg-bg-card p-4"
+          >
+            <span className="font-mono text-sm font-semibold text-text-primary">
+              {state.name}
+            </span>
+            <p className="mt-1 text-[11px] leading-relaxed text-text-muted">
+              {state.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </SectionWrapper>
+  );
+}
