@@ -10,21 +10,25 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@xyflow/react": "^12.10.0",
+    "dagre": "^0.8.5",
+    "mermaid": "^11.12.2",
+    "motion": "^12.12.1",
     "next": "^15.3.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "motion": "^12.12.1",
     "react-intersection-observer": "^9.16.0"
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.1.7",
+    "@types/dagre": "^0.7.53",
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
-    "@tailwindcss/postcss": "^4.1.7",
-    "tailwindcss": "^4.1.7",
     "eslint": "^9.25.0",
     "eslint-config-next": "^15.3.3",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4.1.7",
+    "typescript": "^5.8.3"
   }
 }

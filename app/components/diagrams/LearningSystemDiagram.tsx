@@ -1,38 +1,39 @@
 "use client";
 
-import DiagramCanvas from "./primitives/DiagramCanvas";
-import DiagramNode from "./primitives/DiagramNode";
-import DiagramEdge from "./primitives/DiagramEdge";
-import type { NodeDef, EdgeDef } from "./primitives/types";
+import type { Node, Edge } from "@xyflow/react";
+import FlowDiagram from "./primitives/FlowDiagram";
+import { hqNodeTypes } from "./primitives/custom-nodes";
+import { hqEdgeTypes } from "./primitives/custom-edges";
+import { applyDagreLayout } from "./primitives/auto-layout";
 
-const nodes: NodeDef[] = [
-  { id: "task", x: 40, y: 20, width: 180, height: 48, label: "Task Execution", variant: "rounded" },
-  { id: "remember", x: 40, y: 110, width: 180, height: 52, label: "/remember", sublabel: "User correction", variant: "rounded", emphasis: true },
-  { id: "learn", x: 280, y: 65, width: 180, height: 52, label: "/learn", sublabel: "Auto-capture", variant: "rounded" },
-  { id: "classify", x: 520, y: 65, width: 200, height: 52, label: "Classify Scope", sublabel: "worker + command + knowledge + global", variant: "rounded" },
-  { id: "inject", x: 520, y: 180, width: 200, height: 48, label: "Inject Rule", sublabel: "into governing file", variant: "rounded", emphasis: true },
-  { id: "log", x: 520, y: 270, width: 200, height: 48, label: "Event Log", sublabel: "workspace/learnings/*.json", variant: "rounded" },
+const rawNodes: Node[] = [
+  { id: "task", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Task Execution" }, style: { width: 180, height: 48 } },
+  { id: "remember", type: "hqEmphasis", position: { x: 0, y: 0 }, data: { label: "/remember", sublabel: "User correction" }, style: { width: 180, height: 52 } },
+  { id: "learn", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "/learn", sublabel: "Auto-capture" }, style: { width: 180, height: 52 } },
+  { id: "classify", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Classify Scope", sublabel: "worker + command + knowledge + global" }, style: { width: 200, height: 52 } },
+  { id: "inject", type: "hqEmphasis", position: { x: 0, y: 0 }, data: { label: "Inject Rule", sublabel: "into governing file" }, style: { width: 200, height: 48 } },
+  { id: "log", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Event Log", sublabel: "workspace/learnings/*.json" }, style: { width: 200, height: 48 } },
 ];
 
-const edges: EdgeDef[] = [
-  { from: "task", to: "learn", fromSide: "right", toSide: "left" },
-  { from: "remember", to: "learn", fromSide: "right", toSide: "left" },
-  { from: "learn", to: "classify" },
-  { from: "classify", to: "inject", fromSide: "bottom", toSide: "top" },
-  { from: "classify", to: "log", fromSide: "bottom", toSide: "top" },
+const edges: Edge[] = [
+  { id: "e1", source: "task", target: "learn", type: "hqDefault" },
+  { id: "e2", source: "remember", target: "learn", type: "hqDefault" },
+  { id: "e3", source: "learn", target: "classify", type: "hqDefault" },
+  { id: "e4", source: "classify", target: "inject", type: "hqDefault" },
+  { id: "e5", source: "classify", target: "log", type: "hqDefault" },
 ];
 
-const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+const nodes = applyDagreLayout(rawNodes, edges, { direction: "LR", rankSep: 60, nodeSep: 40 });
 
 export default function LearningSystemDiagram() {
   return (
-    <DiagramCanvas viewBox="0 0 760 340" ariaLabel="Learning system flow from task execution through classification to rule injection">
-      {edges.map((e, i) => (
-        <DiagramEdge key={`${e.from}-${e.to}`} {...e} nodes={nodeMap} delay={0.2 + i * 0.04} />
-      ))}
-      {nodes.map((n, i) => (
-        <DiagramNode key={n.id} {...n} delay={i * 0.06} />
-      ))}
-    </DiagramCanvas>
+    <FlowDiagram
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={hqNodeTypes}
+      edgeTypes={hqEdgeTypes}
+      height={350}
+      ariaLabel="Learning system flow from task execution through classification to rule injection"
+    />
   );
 }

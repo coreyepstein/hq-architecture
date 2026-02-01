@@ -1,57 +1,53 @@
 "use client";
 
-import DiagramCanvas from "./primitives/DiagramCanvas";
-import DiagramNode from "./primitives/DiagramNode";
-import DiagramEdge from "./primitives/DiagramEdge";
-import type { NodeDef, EdgeDef } from "./primitives/types";
+import type { Node, Edge } from "@xyflow/react";
+import FlowDiagram from "./primitives/FlowDiagram";
+import { hqNodeTypes } from "./primitives/custom-nodes";
+import { hqEdgeTypes } from "./primitives/custom-edges";
+import { applyDagreLayout } from "./primitives/auto-layout";
 
-const nodes: NodeDef[] = [
-  // Start
-  { id: "start", x: 20, y: 130, width: 28, height: 28, label: "", variant: "circle" },
-  // States — main flow
-  { id: "idle", x: 80, y: 120, width: 120, height: 44, label: "idle", variant: "rounded" },
-  { id: "loading", x: 240, y: 120, width: 140, height: 44, label: "loading", variant: "rounded" },
-  { id: "planning", x: 420, y: 120, width: 140, height: 44, label: "planning", variant: "rounded" },
-  { id: "executing", x: 600, y: 120, width: 150, height: 44, label: "executing", variant: "rounded" },
-  { id: "verifying", x: 790, y: 120, width: 150, height: 44, label: "verifying", variant: "rounded", emphasis: true },
-  { id: "post_hook", x: 980, y: 120, width: 150, height: 44, label: "post_hook", variant: "rounded" },
-  { id: "completed", x: 1060, y: 240, width: 150, height: 44, label: "completed", variant: "rounded" },
-  // End
-  { id: "end", x: 1152, y: 310, width: 28, height: 28, label: "", variant: "circle" },
-  // Error — below
-  { id: "error", x: 520, y: 260, width: 140, height: 44, label: "error", variant: "rounded" },
+const s = { width: 130, height: 44 };
+
+const rawNodes: Node[] = [
+  { id: "start", type: "hqCircle", position: { x: 0, y: 0 }, data: { label: "" }, style: { width: 20, height: 20 } },
+  { id: "idle", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "idle" }, style: s },
+  { id: "loading", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "loading" }, style: s },
+  { id: "planning", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "planning" }, style: s },
+  { id: "executing", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "executing" }, style: s },
+  { id: "verifying", type: "hqEmphasis", position: { x: 0, y: 0 }, data: { label: "verifying" }, style: s },
+  { id: "post_hook", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "post_hook" }, style: s },
+  { id: "completed", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "completed" }, style: s },
+  { id: "end", type: "hqCircle", position: { x: 0, y: 0 }, data: { label: "" }, style: { width: 20, height: 20 } },
+  { id: "error", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "error" }, style: s },
 ];
 
-const edges: EdgeDef[] = [
-  { from: "start", to: "idle", label: "" },
-  { from: "idle", to: "loading", label: "skill_requested" },
-  { from: "loading", to: "planning", label: "context_loaded" },
-  { from: "planning", to: "executing", label: "plan_ready" },
-  { from: "executing", to: "verifying", label: "execution_done" },
-  { from: "verifying", to: "post_hook", label: "verification_passed" },
-  { from: "post_hook", to: "completed", label: "hook_complete", fromSide: "bottom", toSide: "top" },
-  { from: "completed", to: "end", fromSide: "bottom", toSide: "top" },
-  // Error branches
-  { from: "loading", to: "error", label: "load_failed", fromSide: "bottom", toSide: "top" },
-  { from: "executing", to: "error", label: "exec_failed", fromSide: "bottom", toSide: "top" },
-  { from: "verifying", to: "error", label: "verify_failed", fromSide: "bottom", toSide: "top" },
-  // Retry
-  { from: "error", to: "loading", label: "retry", fromSide: "left", toSide: "bottom", waypoints: [{ x: 310, y: 282 }] },
-  // Max retries
-  { from: "error", to: "completed", label: "max_retries" },
+const edges: Edge[] = [
+  { id: "e1", source: "start", target: "idle", type: "hqDefault" },
+  { id: "e2", source: "idle", target: "loading", type: "hqLabeled", data: { label: "skill_requested" } },
+  { id: "e3", source: "loading", target: "planning", type: "hqLabeled", data: { label: "context_loaded" } },
+  { id: "e4", source: "planning", target: "executing", type: "hqLabeled", data: { label: "plan_ready" } },
+  { id: "e5", source: "executing", target: "verifying", type: "hqLabeled", data: { label: "execution_done" } },
+  { id: "e6", source: "verifying", target: "post_hook", type: "hqLabeled", data: { label: "verification_passed" } },
+  { id: "e7", source: "post_hook", target: "completed", type: "hqLabeled", data: { label: "hook_complete" } },
+  { id: "e8", source: "completed", target: "end", type: "hqDefault" },
+  { id: "e9", source: "loading", target: "error", type: "hqLabeled", data: { label: "load_failed" } },
+  { id: "e10", source: "executing", target: "error", type: "hqLabeled", data: { label: "exec_failed" } },
+  { id: "e11", source: "verifying", target: "error", type: "hqLabeled", data: { label: "verify_failed" } },
+  { id: "e12", source: "error", target: "loading", type: "hqLabeled", data: { label: "retry" } },
+  { id: "e13", source: "error", target: "completed", type: "hqLabeled", data: { label: "max_retries" } },
 ];
 
-const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+const nodes = applyDagreLayout(rawNodes, edges, { direction: "LR", rankSep: 70, nodeSep: 50 });
 
 export default function StateMachineDiagram() {
   return (
-    <DiagramCanvas viewBox="0 0 1240 360" ariaLabel="Worker state machine lifecycle from idle through execution to completion or error">
-      {edges.map((e, i) => (
-        <DiagramEdge key={`${e.from}-${e.to}`} {...e} nodes={nodeMap} delay={0.2 + i * 0.03} />
-      ))}
-      {nodes.map((n, i) => (
-        <DiagramNode key={n.id} {...n} delay={i * 0.05} />
-      ))}
-    </DiagramCanvas>
+    <FlowDiagram
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={hqNodeTypes}
+      edgeTypes={hqEdgeTypes}
+      height={380}
+      ariaLabel="Worker state machine lifecycle from idle through execution to completion or error"
+    />
   );
 }

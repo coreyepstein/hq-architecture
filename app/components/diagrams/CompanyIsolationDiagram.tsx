@@ -1,39 +1,35 @@
 "use client";
 
-import DiagramCanvas from "./primitives/DiagramCanvas";
-import DiagramNode from "./primitives/DiagramNode";
-import DiagramGroup from "./primitives/DiagramGroup";
-import type { NodeDef, GroupDef } from "./primitives/types";
+import type { Node } from "@xyflow/react";
+import FlowDiagram from "./primitives/FlowDiagram";
+import { hqNodeTypes } from "./primitives/custom-nodes";
 
-const groups: GroupDef[] = [
-  { id: "compA", x: 20, y: 20, width: 260, height: 200, label: "Company A" },
-  { id: "compB", x: 310, y: 20, width: 260, height: 200, label: "Company B" },
-  { id: "personal", x: 600, y: 20, width: 260, height: 200, label: "Personal" },
-];
-
-const nodes: NodeDef[] = [
-  // Company A
-  { id: "a-settings", x: 50, y: 60, width: 200, height: 40, label: "settings/", variant: "rounded" },
-  { id: "a-data", x: 50, y: 112, width: 200, height: 40, label: "data/", variant: "rounded" },
-  { id: "a-knowledge", x: 50, y: 164, width: 200, height: 40, label: "knowledge/", variant: "rounded" },
-  // Company B
-  { id: "b-settings", x: 340, y: 60, width: 200, height: 40, label: "settings/", variant: "rounded" },
-  { id: "b-data", x: 340, y: 112, width: 200, height: 40, label: "data/", variant: "rounded" },
-  { id: "b-knowledge", x: 340, y: 164, width: 200, height: 40, label: "knowledge/", variant: "rounded" },
-  // Personal
-  { id: "p-settings", x: 630, y: 60, width: 200, height: 40, label: "settings/", variant: "rounded" },
-  { id: "p-knowledge", x: 630, y: 112, width: 200, height: 40, label: "knowledge/", variant: "rounded" },
+const nodes: Node[] = [
+  // Groups
+  { id: "compA", type: "hqGroup", position: { x: 0, y: 0 }, data: { label: "Company A" }, style: { width: 240, height: 200 } },
+  { id: "compB", type: "hqGroup", position: { x: 270, y: 0 }, data: { label: "Company B" }, style: { width: 240, height: 200 } },
+  { id: "personal", type: "hqGroup", position: { x: 540, y: 0 }, data: { label: "Personal" }, style: { width: 240, height: 200 } },
+  // Company A children
+  { id: "a-settings", type: "hqDefault", position: { x: 15, y: 35 }, data: { label: "settings/" }, style: { width: 210, height: 40 }, parentId: "compA", extent: "parent" as const },
+  { id: "a-data", type: "hqDefault", position: { x: 15, y: 85 }, data: { label: "data/" }, style: { width: 210, height: 40 }, parentId: "compA", extent: "parent" as const },
+  { id: "a-knowledge", type: "hqDefault", position: { x: 15, y: 135 }, data: { label: "knowledge/" }, style: { width: 210, height: 40 }, parentId: "compA", extent: "parent" as const },
+  // Company B children
+  { id: "b-settings", type: "hqDefault", position: { x: 15, y: 35 }, data: { label: "settings/" }, style: { width: 210, height: 40 }, parentId: "compB", extent: "parent" as const },
+  { id: "b-data", type: "hqDefault", position: { x: 15, y: 85 }, data: { label: "data/" }, style: { width: 210, height: 40 }, parentId: "compB", extent: "parent" as const },
+  { id: "b-knowledge", type: "hqDefault", position: { x: 15, y: 135 }, data: { label: "knowledge/" }, style: { width: 210, height: 40 }, parentId: "compB", extent: "parent" as const },
+  // Personal children
+  { id: "p-settings", type: "hqDefault", position: { x: 15, y: 35 }, data: { label: "settings/" }, style: { width: 210, height: 40 }, parentId: "personal", extent: "parent" as const },
+  { id: "p-knowledge", type: "hqDefault", position: { x: 15, y: 85 }, data: { label: "knowledge/" }, style: { width: 210, height: 40 }, parentId: "personal", extent: "parent" as const },
 ];
 
 export default function CompanyIsolationDiagram() {
   return (
-    <DiagramCanvas viewBox="0 0 880 240" ariaLabel="Company isolation architecture showing three isolated contexts">
-      {groups.map((g, i) => (
-        <DiagramGroup key={g.id} {...g} delay={i * 0.1} />
-      ))}
-      {nodes.map((n, i) => (
-        <DiagramNode key={n.id} {...n} delay={0.15 + i * 0.04} />
-      ))}
-    </DiagramCanvas>
+    <FlowDiagram
+      nodes={nodes}
+      edges={[]}
+      nodeTypes={hqNodeTypes}
+      height={260}
+      ariaLabel="Company isolation architecture showing three isolated contexts"
+    />
   );
 }

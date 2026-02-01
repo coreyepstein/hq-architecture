@@ -1,60 +1,63 @@
 "use client";
 
-import DiagramCanvas from "./primitives/DiagramCanvas";
-import DiagramNode from "./primitives/DiagramNode";
-import DiagramGroup from "./primitives/DiagramGroup";
-import type { NodeDef, GroupDef } from "./primitives/types";
+import type { Node } from "@xyflow/react";
+import FlowDiagram from "./primitives/FlowDiagram";
+import { hqNodeTypes } from "./primitives/custom-nodes";
 
-const groups: GroupDef[] = [
-  { id: "dev", x: 20, y: 10, width: 440, height: 240, label: "Dev Team  (12)" },
-  { id: "content", x: 480, y: 10, width: 260, height: 130, label: "Content Team  (5)" },
-  { id: "utility", x: 480, y: 155, width: 260, height: 95, label: "Utility  (3)" },
-  { id: "custom", x: 760, y: 10, width: 220, height: 240, label: "Custom  (you create)" },
-];
+const nw = 125;
+const nh = 32;
+const gap = 6;
 
-const nodes: NodeDef[] = [
-  // Dev Team — 3 columns x 4 rows
-  { id: "pm", x: 40, y: 44, width: 125, height: 34, label: "project-manager" },
-  { id: "te", x: 40, y: 86, width: 125, height: 34, label: "task-executor" },
-  { id: "arch", x: 40, y: 128, width: 125, height: 34, label: "architect" },
-  { id: "be", x: 40, y: 170, width: 125, height: 34, label: "backend-dev" },
+function col(c: number) { return 10 + c * (nw + gap); }
+function row(r: number) { return 34 + r * (nh + gap); }
 
-  { id: "db", x: 178, y: 44, width: 125, height: 34, label: "database-dev" },
-  { id: "fe", x: 178, y: 86, width: 125, height: 34, label: "frontend-dev" },
-  { id: "infra", x: 178, y: 128, width: 125, height: 34, label: "infra-dev" },
-  { id: "md", x: 178, y: 170, width: 125, height: 34, label: "motion-designer" },
+const nodes: Node[] = [
+  // Groups
+  { id: "dev", type: "hqGroup", position: { x: 0, y: 0 }, data: { label: "Dev Team  (12)" }, style: { width: 3 * nw + 4 * gap + 20, height: 4 * nh + 5 * gap + 34 } },
+  { id: "content", type: "hqGroup", position: { x: 420, y: 0 }, data: { label: "Content Team  (5)" }, style: { width: 2 * 115 + 30, height: 3 * nh + 4 * gap + 34 } },
+  { id: "utility", type: "hqGroup", position: { x: 420, y: 160 }, data: { label: "Utility  (3)" }, style: { width: 2 * 115 + 30, height: nh + 2 * gap + 34 } },
+  { id: "custom", type: "hqGroup", position: { x: 690, y: 0 }, data: { label: "Custom  (you create)" }, style: { width: 200, height: 4 * nh + 5 * gap + 34 } },
 
-  { id: "cr", x: 316, y: 44, width: 125, height: 34, label: "code-reviewer" },
-  { id: "kc", x: 316, y: 86, width: 125, height: 34, label: "knowledge-curator" },
-  { id: "pp", x: 316, y: 128, width: 125, height: 34, label: "product-planner" },
-  { id: "dqa", x: 316, y: 170, width: 125, height: 34, label: "dev-qa-tester" },
+  // Dev Team
+  { id: "pm", type: "hqDefault", position: { x: col(0), y: row(0) }, data: { label: "project-manager" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "te", type: "hqDefault", position: { x: col(0), y: row(1) }, data: { label: "task-executor" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "arch", type: "hqDefault", position: { x: col(0), y: row(2) }, data: { label: "architect" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "be", type: "hqDefault", position: { x: col(0), y: row(3) }, data: { label: "backend-dev" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "db", type: "hqDefault", position: { x: col(1), y: row(0) }, data: { label: "database-dev" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "fe", type: "hqDefault", position: { x: col(1), y: row(1) }, data: { label: "frontend-dev" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "infra", type: "hqDefault", position: { x: col(1), y: row(2) }, data: { label: "infra-dev" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "md", type: "hqDefault", position: { x: col(1), y: row(3) }, data: { label: "motion-designer" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "cr", type: "hqDefault", position: { x: col(2), y: row(0) }, data: { label: "code-reviewer" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "kc", type: "hqDefault", position: { x: col(2), y: row(1) }, data: { label: "knowledge-curator" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "pp", type: "hqDefault", position: { x: col(2), y: row(2) }, data: { label: "product-planner" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
+  { id: "dqa", type: "hqDefault", position: { x: col(2), y: row(3) }, data: { label: "dev-qa-tester" }, style: { width: nw, height: nh }, parentId: "dev", extent: "parent" as const },
 
   // Content Team
-  { id: "cb", x: 500, y: 44, width: 110, height: 34, label: "content-brand" },
-  { id: "cs", x: 500, y: 86, width: 110, height: 34, label: "content-sales" },
-  { id: "cp", x: 620, y: 44, width: 110, height: 34, label: "content-product" },
-  { id: "cl", x: 620, y: 86, width: 110, height: 34, label: "content-legal" },
+  { id: "cb", type: "hqDefault", position: { x: 10, y: 34 }, data: { label: "content-brand" }, style: { width: 115, height: nh }, parentId: "content", extent: "parent" as const },
+  { id: "cs", type: "hqDefault", position: { x: 10, y: 34 + nh + gap }, data: { label: "content-sales" }, style: { width: 115, height: nh }, parentId: "content", extent: "parent" as const },
+  { id: "cp", type: "hqDefault", position: { x: 135, y: 34 }, data: { label: "content-product" }, style: { width: 115, height: nh }, parentId: "content", extent: "parent" as const },
+  { id: "cl", type: "hqDefault", position: { x: 135, y: 34 + nh + gap }, data: { label: "content-legal" }, style: { width: 115, height: nh }, parentId: "content", extent: "parent" as const },
+  { id: "csh", type: "hqDefault", position: { x: 10, y: 34 + 2 * (nh + gap) }, data: { label: "content-shared" }, style: { width: 115, height: nh }, parentId: "content", extent: "parent" as const },
 
   // Utility
-  { id: "fd", x: 500, y: 190, width: 110, height: 34, label: "frontend-designer" },
-  { id: "qt", x: 620, y: 190, width: 110, height: 34, label: "qa-tester" },
+  { id: "fd", type: "hqDefault", position: { x: 10, y: 34 }, data: { label: "frontend-designer" }, style: { width: 115, height: nh }, parentId: "utility", extent: "parent" as const },
+  { id: "qt", type: "hqDefault", position: { x: 135, y: 34 }, data: { label: "qa-tester" }, style: { width: 115, height: nh }, parentId: "utility", extent: "parent" as const },
 
   // Custom
-  { id: "yc", x: 780, y: 44, width: 180, height: 34, label: "your-cfo" },
-  { id: "ym", x: 780, y: 86, width: 180, height: 34, label: "your-cmo" },
-  { id: "ya", x: 780, y: 128, width: 180, height: 34, label: "your-analyst" },
-  { id: "ys", x: 780, y: 170, width: 180, height: 34, label: "your-social" },
+  { id: "yc", type: "hqDefault", position: { x: 10, y: row(0) }, data: { label: "your-cfo" }, style: { width: 180, height: nh }, parentId: "custom", extent: "parent" as const },
+  { id: "ym", type: "hqDefault", position: { x: 10, y: row(1) }, data: { label: "your-cmo" }, style: { width: 180, height: nh }, parentId: "custom", extent: "parent" as const },
+  { id: "ya", type: "hqDefault", position: { x: 10, y: row(2) }, data: { label: "your-analyst" }, style: { width: 180, height: nh }, parentId: "custom", extent: "parent" as const },
+  { id: "ys", type: "hqDefault", position: { x: 10, y: row(3) }, data: { label: "your-social" }, style: { width: 180, height: nh }, parentId: "custom", extent: "parent" as const },
 ];
 
 export default function WorkerHierarchyDiagram() {
   return (
-    <DiagramCanvas viewBox="0 0 1000 265" ariaLabel="Worker hierarchy organized into Dev Team, Content Team, Utility, and Custom groups">
-      {groups.map((g, i) => (
-        <DiagramGroup key={g.id} {...g} delay={i * 0.08} />
-      ))}
-      {nodes.map((n, i) => (
-        <DiagramNode key={n.id} {...n} delay={0.15 + i * 0.03} />
-      ))}
-    </DiagramCanvas>
+    <FlowDiagram
+      nodes={nodes}
+      edges={[]}
+      nodeTypes={hqNodeTypes}
+      height={310}
+      ariaLabel="Worker hierarchy organized into Dev Team, Content Team, Utility, and Custom groups"
+    />
   );
 }

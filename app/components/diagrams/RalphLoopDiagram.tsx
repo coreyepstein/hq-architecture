@@ -1,46 +1,48 @@
 "use client";
 
-import DiagramCanvas from "./primitives/DiagramCanvas";
-import DiagramNode from "./primitives/DiagramNode";
-import DiagramEdge from "./primitives/DiagramEdge";
-import type { NodeDef, EdgeDef } from "./primitives/types";
+import type { Node, Edge } from "@xyflow/react";
+import FlowDiagram from "./primitives/FlowDiagram";
+import { hqNodeTypes } from "./primitives/custom-nodes";
+import { hqEdgeTypes } from "./primitives/custom-edges";
+import { applyDagreLayout } from "./primitives/auto-layout";
 
-const nodes: NodeDef[] = [
-  { id: "prd", x: 20, y: 100, width: 120, height: 48, label: "Read PRD", variant: "rounded" },
-  { id: "pick", x: 170, y: 100, width: 140, height: 48, label: "Pick Task", sublabel: "passes: false", variant: "rounded" },
-  { id: "spawn", x: 340, y: 100, width: 150, height: 48, label: "Spawn Agent", sublabel: "fresh context", variant: "rounded" },
-  { id: "exec", x: 520, y: 100, width: 140, height: 48, label: "Execute Task", variant: "rounded" },
-  { id: "bp", x: 690, y: 100, width: 160, height: 48, label: "Back Pressure", sublabel: "typecheck + build + test", variant: "rounded", emphasis: true },
-  { id: "cp", x: 880, y: 100, width: 140, height: 48, label: "Checkpoint", sublabel: "thread + git", variant: "rounded" },
-  { id: "update", x: 1050, y: 100, width: 140, height: 48, label: "Update PRD", sublabel: "passes: true", variant: "rounded" },
-  { id: "check", x: 1050, y: 210, width: 140, height: 48, label: "All passing?", variant: "diamond" },
-  { id: "done", x: 1050, y: 310, width: 140, height: 48, label: "Create PR", variant: "rounded", emphasis: true },
+const s = { width: 140, height: 48 };
+
+const rawNodes: Node[] = [
+  { id: "prd", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Read PRD" }, style: s },
+  { id: "pick", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Pick Task", sublabel: "passes: false" }, style: s },
+  { id: "spawn", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Spawn Agent", sublabel: "fresh context" }, style: { width: 150, height: 48 } },
+  { id: "exec", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Execute Task" }, style: s },
+  { id: "bp", type: "hqEmphasis", position: { x: 0, y: 0 }, data: { label: "Back Pressure", sublabel: "typecheck + build + test" }, style: { width: 160, height: 48 } },
+  { id: "cp", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Checkpoint", sublabel: "thread + git" }, style: s },
+  { id: "update", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Update PRD", sublabel: "passes: true" }, style: s },
+  { id: "check", type: "hqDiamond", position: { x: 0, y: 0 }, data: { label: "All passing?" }, style: { width: 65, height: 65 } },
+  { id: "done", type: "hqEmphasis", position: { x: 0, y: 0 }, data: { label: "Create PR" }, style: s },
 ];
 
-const edges: EdgeDef[] = [
-  { from: "prd", to: "pick" },
-  { from: "pick", to: "spawn" },
-  { from: "spawn", to: "exec" },
-  { from: "exec", to: "bp" },
-  { from: "bp", to: "cp" },
-  { from: "cp", to: "update" },
-  { from: "update", to: "check", fromSide: "bottom", toSide: "top" },
-  { from: "check", to: "done", label: "Yes", fromSide: "bottom", toSide: "top" },
-  // Loop back
-  { from: "check", to: "pick", label: "No", fromSide: "left", toSide: "bottom", waypoints: [{ x: 240, y: 234 }] },
+const edges: Edge[] = [
+  { id: "e1", source: "prd", target: "pick", type: "hqDefault" },
+  { id: "e2", source: "pick", target: "spawn", type: "hqDefault" },
+  { id: "e3", source: "spawn", target: "exec", type: "hqDefault" },
+  { id: "e4", source: "exec", target: "bp", type: "hqDefault" },
+  { id: "e5", source: "bp", target: "cp", type: "hqDefault" },
+  { id: "e6", source: "cp", target: "update", type: "hqDefault" },
+  { id: "e7", source: "update", target: "check", type: "hqDefault" },
+  { id: "e8", source: "check", target: "done", type: "hqLabeled", data: { label: "Yes" } },
+  { id: "e9", source: "check", target: "pick", type: "hqLabeled", data: { label: "No" } },
 ];
 
-const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+const nodes = applyDagreLayout(rawNodes, edges, { direction: "LR", rankSep: 60, nodeSep: 40 });
 
 export default function RalphLoopDiagram() {
   return (
-    <DiagramCanvas viewBox="0 0 1220 380" ariaLabel="Ralph loop orchestration flow with back-pressure and loopback">
-      {edges.map((e, i) => (
-        <DiagramEdge key={`${e.from}-${e.to}`} {...e} nodes={nodeMap} delay={0.2 + i * 0.04} />
-      ))}
-      {nodes.map((n, i) => (
-        <DiagramNode key={n.id} {...n} delay={i * 0.05} />
-      ))}
-    </DiagramCanvas>
+    <FlowDiagram
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={hqNodeTypes}
+      edgeTypes={hqEdgeTypes}
+      height={400}
+      ariaLabel="Ralph loop orchestration flow with back-pressure and loopback"
+    />
   );
 }

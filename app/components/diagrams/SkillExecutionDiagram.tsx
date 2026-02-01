@@ -1,41 +1,42 @@
 "use client";
 
-import DiagramCanvas from "./primitives/DiagramCanvas";
-import DiagramNode from "./primitives/DiagramNode";
-import DiagramEdge from "./primitives/DiagramEdge";
-import type { NodeDef, EdgeDef } from "./primitives/types";
+import type { Node, Edge } from "@xyflow/react";
+import FlowDiagram from "./primitives/FlowDiagram";
+import { hqNodeTypes } from "./primitives/custom-nodes";
+import { hqEdgeTypes } from "./primitives/custom-edges";
+import { applyDagreLayout } from "./primitives/auto-layout";
 
-const nodes: NodeDef[] = [
-  { id: "input", x: 200, y: 10, width: 200, height: 52, label: "Inputs", sublabel: "string + number + boolean + array", variant: "rounded" },
-  { id: "worker", x: 200, y: 100, width: 200, height: 52, label: "Worker + Skill", sublabel: "worker.yaml + skills/*.md", variant: "rounded" },
-  { id: "verify", x: 200, y: 190, width: 200, height: 48, label: "Verification", sublabel: "shell commands + must_pass", variant: "rounded", emphasis: true },
-  { id: "mutating", x: 200, y: 280, width: 200, height: 48, label: "mutating?", variant: "diamond" },
-  { id: "hook", x: 60, y: 380, width: 180, height: 48, label: "PostToolsHook", sublabel: "checkpoint + metrics + thread", variant: "rounded" },
-  { id: "readonly", x: 360, y: 380, width: 180, height: 48, label: "Read-only", sublabel: "no side effects", variant: "rounded" },
-  { id: "output", x: 200, y: 480, width: 200, height: 52, label: "Outputs", sublabel: "markdown + json + git_commit", variant: "rounded" },
+const rawNodes: Node[] = [
+  { id: "input", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Inputs", sublabel: "string + number + boolean + array" }, style: { width: 200, height: 50 } },
+  { id: "worker", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Worker + Skill", sublabel: "worker.yaml + skills/*.md" }, style: { width: 200, height: 50 } },
+  { id: "verify", type: "hqEmphasis", position: { x: 0, y: 0 }, data: { label: "Verification", sublabel: "shell commands + must_pass" }, style: { width: 200, height: 50 } },
+  { id: "mutating", type: "hqDiamond", position: { x: 0, y: 0 }, data: { label: "mutating?" }, style: { width: 70, height: 70 } },
+  { id: "hook", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "PostToolsHook", sublabel: "checkpoint + metrics + thread" }, style: { width: 200, height: 50 } },
+  { id: "readonly", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Read-only", sublabel: "no side effects" }, style: { width: 200, height: 50 } },
+  { id: "output", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "Outputs", sublabel: "markdown + json + git_commit" }, style: { width: 200, height: 50 } },
 ];
 
-const edges: EdgeDef[] = [
-  { from: "input", to: "worker" },
-  { from: "worker", to: "verify" },
-  { from: "verify", to: "mutating" },
-  { from: "mutating", to: "hook", label: "true", fromSide: "left", toSide: "top" },
-  { from: "mutating", to: "readonly", label: "false", fromSide: "right", toSide: "top" },
-  { from: "hook", to: "output", fromSide: "bottom", toSide: "left" },
-  { from: "readonly", to: "output", fromSide: "bottom", toSide: "right" },
+const edges: Edge[] = [
+  { id: "e1", source: "input", target: "worker", type: "hqDefault" },
+  { id: "e2", source: "worker", target: "verify", type: "hqDefault" },
+  { id: "e3", source: "verify", target: "mutating", type: "hqDefault" },
+  { id: "e4", source: "mutating", target: "hook", type: "hqLabeled", data: { label: "true" } },
+  { id: "e5", source: "mutating", target: "readonly", type: "hqLabeled", data: { label: "false" } },
+  { id: "e6", source: "hook", target: "output", type: "hqDefault" },
+  { id: "e7", source: "readonly", target: "output", type: "hqDefault" },
 ];
 
-const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+const nodes = applyDagreLayout(rawNodes, edges, { direction: "TB", rankSep: 50, nodeSep: 60 });
 
 export default function SkillExecutionDiagram() {
   return (
-    <DiagramCanvas viewBox="0 0 600 560" ariaLabel="Skill execution flow with verification and mutating decision fork">
-      {edges.map((e, i) => (
-        <DiagramEdge key={`${e.from}-${e.to}`} {...e} nodes={nodeMap} delay={0.2 + i * 0.04} />
-      ))}
-      {nodes.map((n, i) => (
-        <DiagramNode key={n.id} {...n} delay={i * 0.06} />
-      ))}
-    </DiagramCanvas>
+    <FlowDiagram
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={hqNodeTypes}
+      edgeTypes={hqEdgeTypes}
+      height={550}
+      ariaLabel="Skill execution flow with verification and mutating decision fork"
+    />
   );
 }

@@ -1,77 +1,73 @@
 "use client";
 
-import DiagramCanvas from "./primitives/DiagramCanvas";
-import DiagramNode from "./primitives/DiagramNode";
-import DiagramEdge from "./primitives/DiagramEdge";
-import type { NodeDef, EdgeDef } from "./primitives/types";
+import type { Node, Edge } from "@xyflow/react";
+import FlowDiagram from "./primitives/FlowDiagram";
+import { hqNodeTypes } from "./primitives/custom-nodes";
+import { hqEdgeTypes } from "./primitives/custom-edges";
+import { applyDagreLayout } from "./primitives/auto-layout";
 
-const nodes: NodeDef[] = [
-  // Root
-  { id: "hq", x: 440, y: 10, width: 180, height: 52, label: "HQ/", sublabel: "Personal OS Root", variant: "rounded", emphasis: true },
-  // Tier 1
-  { id: "claude", x: 10, y: 110, width: 150, height: 44, label: ".claude/commands/", variant: "rounded" },
-  { id: "agents", x: 170, y: 110, width: 130, height: 44, label: "agents.md", variant: "rounded" },
-  { id: "companies", x: 310, y: 110, width: 140, height: 44, label: "companies/", variant: "rounded" },
-  { id: "knowledge", x: 460, y: 110, width: 140, height: 44, label: "knowledge/", variant: "rounded" },
-  { id: "projects", x: 610, y: 110, width: 130, height: 44, label: "projects/", variant: "rounded" },
-  { id: "repos", x: 750, y: 110, width: 110, height: 44, label: "repos/", variant: "rounded" },
-  { id: "workers", x: 870, y: 110, width: 120, height: 44, label: "workers/", variant: "rounded" },
-  { id: "workspace", x: 1000, y: 110, width: 140, height: 44, label: "workspace/", variant: "rounded" },
-  // Tier 2 — companies
-  { id: "c1", x: 230, y: 220, width: 110, height: 38, label: "company-a/" },
-  { id: "c2", x: 350, y: 220, width: 110, height: 38, label: "company-b/" },
-  { id: "c3", x: 470, y: 220, width: 100, height: 38, label: "personal/" },
-  // Tier 2 — knowledge
-  { id: "kpub", x: 390, y: 310, width: 110, height: 38, label: "public/" },
-  { id: "kpriv", x: 510, y: 310, width: 110, height: 38, label: "private/" },
-  // Tier 2 — workers
-  { id: "wpub", x: 830, y: 220, width: 110, height: 38, label: "public/" },
-  { id: "wpriv", x: 950, y: 220, width: 110, height: 38, label: "private/" },
-  // Tier 2 — repos
-  { id: "rpub", x: 680, y: 220, width: 110, height: 38, label: "public/" },
-  { id: "rpriv", x: 770, y: 220, width: 110, height: 38, label: "private/" },
-  // Tier 2 — workspace
-  { id: "threads", x: 920, y: 310, width: 100, height: 38, label: "threads/" },
-  { id: "orch", x: 1030, y: 310, width: 120, height: 38, label: "orchestrator/" },
-  { id: "reports", x: 1160, y: 310, width: 100, height: 38, label: "reports/" },
-  { id: "social", x: 1050, y: 370, width: 120, height: 38, label: "social-drafts/" },
+const s = { width: 140, height: 42 };
+
+const rawNodes: Node[] = [
+  { id: "hq", type: "hqEmphasis", position: { x: 0, y: 0 }, data: { label: "HQ/", sublabel: "Personal OS Root" }, style: { width: 170, height: 50 } },
+  { id: "claude", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: ".claude/commands/" }, style: { width: 160, height: 42 } },
+  { id: "agents", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "agents.md" }, style: s },
+  { id: "companies", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "companies/" }, style: s },
+  { id: "knowledge", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "knowledge/" }, style: s },
+  { id: "projects", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "projects/" }, style: s },
+  { id: "repos", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "repos/" }, style: s },
+  { id: "workers", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "workers/" }, style: s },
+  { id: "workspace", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "workspace/" }, style: s },
+  { id: "c1", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "company-a/" }, style: s },
+  { id: "c2", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "company-b/" }, style: s },
+  { id: "c3", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "personal/" }, style: s },
+  { id: "kpub", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "public/" }, style: s },
+  { id: "kpriv", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "private/" }, style: s },
+  { id: "rpub", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "public/" }, style: s },
+  { id: "rpriv", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "private/" }, style: s },
+  { id: "wpub", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "public/" }, style: s },
+  { id: "wpriv", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "private/" }, style: s },
+  { id: "threads", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "threads/" }, style: s },
+  { id: "orch", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "orchestrator/" }, style: s },
+  { id: "reports", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "reports/" }, style: s },
+  { id: "social", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "social-drafts/" }, style: s },
 ];
 
-const edges: EdgeDef[] = [
-  { from: "hq", to: "claude" },
-  { from: "hq", to: "agents" },
-  { from: "hq", to: "companies" },
-  { from: "hq", to: "knowledge" },
-  { from: "hq", to: "projects" },
-  { from: "hq", to: "repos" },
-  { from: "hq", to: "workers" },
-  { from: "hq", to: "workspace" },
-  { from: "companies", to: "c1" },
-  { from: "companies", to: "c2" },
-  { from: "companies", to: "c3" },
-  { from: "knowledge", to: "kpub" },
-  { from: "knowledge", to: "kpriv" },
-  { from: "repos", to: "rpub" },
-  { from: "repos", to: "rpriv" },
-  { from: "workers", to: "wpub" },
-  { from: "workers", to: "wpriv" },
-  { from: "workspace", to: "threads" },
-  { from: "workspace", to: "orch" },
-  { from: "workspace", to: "reports" },
-  { from: "workspace", to: "social" },
+const edges: Edge[] = [
+  { id: "e1", source: "hq", target: "claude", type: "hqDefault" },
+  { id: "e2", source: "hq", target: "agents", type: "hqDefault" },
+  { id: "e3", source: "hq", target: "companies", type: "hqDefault" },
+  { id: "e4", source: "hq", target: "knowledge", type: "hqDefault" },
+  { id: "e5", source: "hq", target: "projects", type: "hqDefault" },
+  { id: "e6", source: "hq", target: "repos", type: "hqDefault" },
+  { id: "e7", source: "hq", target: "workers", type: "hqDefault" },
+  { id: "e8", source: "hq", target: "workspace", type: "hqDefault" },
+  { id: "e9", source: "companies", target: "c1", type: "hqDefault" },
+  { id: "e10", source: "companies", target: "c2", type: "hqDefault" },
+  { id: "e11", source: "companies", target: "c3", type: "hqDefault" },
+  { id: "e12", source: "knowledge", target: "kpub", type: "hqDefault" },
+  { id: "e13", source: "knowledge", target: "kpriv", type: "hqDefault" },
+  { id: "e14", source: "repos", target: "rpub", type: "hqDefault" },
+  { id: "e15", source: "repos", target: "rpriv", type: "hqDefault" },
+  { id: "e16", source: "workers", target: "wpub", type: "hqDefault" },
+  { id: "e17", source: "workers", target: "wpriv", type: "hqDefault" },
+  { id: "e18", source: "workspace", target: "threads", type: "hqDefault" },
+  { id: "e19", source: "workspace", target: "orch", type: "hqDefault" },
+  { id: "e20", source: "workspace", target: "reports", type: "hqDefault" },
+  { id: "e21", source: "workspace", target: "social", type: "hqDefault" },
 ];
 
-const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+const nodes = applyDagreLayout(rawNodes, edges, { direction: "TB", rankSep: 50, nodeSep: 20 });
 
 export default function DirectoryTreeDiagram() {
   return (
-    <DiagramCanvas viewBox="0 0 1280 430" ariaLabel="HQ directory architecture tree">
-      {edges.map((e, i) => (
-        <DiagramEdge key={`${e.from}-${e.to}`} {...e} nodes={nodeMap} delay={0.2 + i * 0.03} />
-      ))}
-      {nodes.map((n, i) => (
-        <DiagramNode key={n.id} {...n} delay={i * 0.04} />
-      ))}
-    </DiagramCanvas>
+    <FlowDiagram
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={hqNodeTypes}
+      edgeTypes={hqEdgeTypes}
+      height={500}
+      ariaLabel="HQ directory architecture tree"
+    />
   );
 }

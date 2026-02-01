@@ -1,42 +1,43 @@
 "use client";
 
-import DiagramCanvas from "./primitives/DiagramCanvas";
-import DiagramNode from "./primitives/DiagramNode";
-import DiagramEdge from "./primitives/DiagramEdge";
-import type { NodeDef, EdgeDef } from "./primitives/types";
+import type { Node, Edge } from "@xyflow/react";
+import FlowDiagram from "./primitives/FlowDiagram";
+import { hqNodeTypes } from "./primitives/custom-nodes";
+import { hqEdgeTypes } from "./primitives/custom-edges";
+import { applyDagreLayout } from "./primitives/auto-layout";
 
-const nodes: NodeDef[] = [
-  { id: "root", x: 310, y: 20, width: 180, height: 52, label: "INDEX.md", sublabel: "Root directory map", variant: "rounded", emphasis: true },
-  { id: "projects", x: 40, y: 140, width: 170, height: 44, label: "projects/INDEX.md", variant: "rounded" },
-  { id: "workers", x: 230, y: 140, width: 160, height: 44, label: "workers/INDEX.md", variant: "rounded" },
-  { id: "knowledge", x: 410, y: 140, width: 180, height: 44, label: "knowledge/INDEX.md", variant: "rounded" },
-  { id: "workspace", x: 610, y: 140, width: 180, height: 44, label: "workspace/INDEX.md", variant: "rounded" },
-  { id: "kpub", x: 410, y: 260, width: 180, height: 44, label: "public/INDEX.md", variant: "rounded" },
-  { id: "orch", x: 560, y: 260, width: 200, height: 44, label: "orchestrator/INDEX.md", variant: "rounded" },
-  { id: "reports", x: 780, y: 260, width: 170, height: 44, label: "reports/INDEX.md", variant: "rounded" },
+const rawNodes: Node[] = [
+  { id: "root", type: "hqEmphasis", position: { x: 0, y: 0 }, data: { label: "INDEX.md", sublabel: "Root directory map" }, style: { width: 180, height: 52 } },
+  { id: "projects", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "projects/INDEX.md" }, style: { width: 170, height: 44 } },
+  { id: "workers", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "workers/INDEX.md" }, style: { width: 170, height: 44 } },
+  { id: "knowledge", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "knowledge/INDEX.md" }, style: { width: 180, height: 44 } },
+  { id: "workspace", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "workspace/INDEX.md" }, style: { width: 180, height: 44 } },
+  { id: "kpub", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "public/INDEX.md" }, style: { width: 160, height: 44 } },
+  { id: "orch", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "orchestrator/INDEX.md" }, style: { width: 190, height: 44 } },
+  { id: "reports", type: "hqDefault", position: { x: 0, y: 0 }, data: { label: "reports/INDEX.md" }, style: { width: 160, height: 44 } },
 ];
 
-const edges: EdgeDef[] = [
-  { from: "root", to: "projects" },
-  { from: "root", to: "workers" },
-  { from: "root", to: "knowledge" },
-  { from: "root", to: "workspace" },
-  { from: "knowledge", to: "kpub" },
-  { from: "workspace", to: "orch" },
-  { from: "workspace", to: "reports" },
+const edges: Edge[] = [
+  { id: "e1", source: "root", target: "projects", type: "hqDefault" },
+  { id: "e2", source: "root", target: "workers", type: "hqDefault" },
+  { id: "e3", source: "root", target: "knowledge", type: "hqDefault" },
+  { id: "e4", source: "root", target: "workspace", type: "hqDefault" },
+  { id: "e5", source: "knowledge", target: "kpub", type: "hqDefault" },
+  { id: "e6", source: "workspace", target: "orch", type: "hqDefault" },
+  { id: "e7", source: "workspace", target: "reports", type: "hqDefault" },
 ];
 
-const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+const nodes = applyDagreLayout(rawNodes, edges, { direction: "TB", rankSep: 55, nodeSep: 30 });
 
 export default function IndexMdDiagram() {
   return (
-    <DiagramCanvas viewBox="0 0 980 330" ariaLabel="INDEX.md hierarchical navigation system">
-      {edges.map((e, i) => (
-        <DiagramEdge key={`${e.from}-${e.to}`} {...e} nodes={nodeMap} delay={0.2 + i * 0.04} />
-      ))}
-      {nodes.map((n, i) => (
-        <DiagramNode key={n.id} {...n} delay={i * 0.06} />
-      ))}
-    </DiagramCanvas>
+    <FlowDiagram
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={hqNodeTypes}
+      edgeTypes={hqEdgeTypes}
+      height={380}
+      ariaLabel="INDEX.md hierarchical navigation system"
+    />
   );
 }
