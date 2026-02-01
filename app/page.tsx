@@ -1,6 +1,7 @@
 import HeroSection from "@/app/components/sections/hero";
 import StatsBar from "@/app/components/sections/stats-bar";
 import DirectoryTreeSection from "@/app/components/sections/directory-tree";
+import IndexMdSystemSection from "@/app/components/sections/index-md-system";
 import CompanyIsolationSection from "@/app/components/sections/company-isolation";
 import WorkerHierarchySection from "@/app/components/sections/worker-hierarchy";
 import CommandCategoriesSection from "@/app/components/sections/command-categories";
@@ -8,7 +9,9 @@ import RalphLoopSection from "@/app/components/sections/ralph-loop";
 import WorkerStateMachineSection from "@/app/components/sections/worker-state-machine";
 import SkillExecutionSection from "@/app/components/sections/skill-execution";
 import ThreadLifecycleSection from "@/app/components/sections/thread-lifecycle";
+import LearningSystemSection from "@/app/components/sections/learning-system";
 import KnowledgeSystemSection from "@/app/components/sections/knowledge-system";
+import KnowledgeReposSection from "@/app/components/sections/knowledge-repos";
 import FooterSection from "@/app/components/sections/footer";
 
 export default function Home() {
@@ -18,6 +21,7 @@ export default function Home() {
       <nav className="fixed right-4 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-2 md:flex">
         {[
           { id: "structure", label: "Structure" },
+          { id: "index-system", label: "INDEX.md" },
           { id: "companies", label: "Companies" },
           { id: "workers", label: "Workers" },
           { id: "commands", label: "Commands" },
@@ -25,7 +29,9 @@ export default function Home() {
           { id: "state-machine", label: "State Machine" },
           { id: "skills", label: "Skills" },
           { id: "threads", label: "Threads" },
+          { id: "learning", label: "Learning" },
           { id: "knowledge", label: "Knowledge" },
+          { id: "knowledge-repos", label: "Repos" },
         ].map((item) => (
           <a
             key={item.id}
@@ -44,6 +50,7 @@ export default function Home() {
       <HeroSection />
       <StatsBar />
       <DirectoryTreeSection />
+      <IndexMdSystemSection />
       <CompanyIsolationSection />
       <WorkerHierarchySection />
       <CommandCategoriesSection />
@@ -51,7 +58,9 @@ export default function Home() {
       <WorkerStateMachineSection />
       <SkillExecutionSection />
       <ThreadLifecycleSection />
+      <LearningSystemSection />
       <KnowledgeSystemSection />
+      <KnowledgeReposSection />
       <FooterSection />
     </main>
   );

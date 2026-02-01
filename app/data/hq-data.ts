@@ -108,13 +108,14 @@ export const workers: Worker[] = [
 export const commandCategories: CommandCategory[] = [
   {
     name: "Session",
-    count: 5,
+    count: 6,
     commands: [
       { id: "reanchor", description: "Context reanchoring" },
       { id: "checkpoint", description: "Save thread state" },
       { id: "handoff", description: "Hand off to fresh session" },
       { id: "nexttask", description: "Scan and suggest next tasks" },
       { id: "remember", description: "Capture learnings" },
+      { id: "learn", description: "Auto-capture learnings" },
     ],
   },
   {
@@ -128,12 +129,11 @@ export const commandCategories: CommandCategory[] = [
   },
   {
     name: "Projects",
-    count: 4,
+    count: 3,
     commands: [
       { id: "prd", description: "Plan project, generate PRD" },
       { id: "run-project", description: "Execute project (Ralph loop)" },
       { id: "execute-task", description: "Execute single task" },
-      { id: "pure-ralph", description: "Launch Pure Ralph orchestrator" },
     ],
   },
   {
@@ -159,13 +159,14 @@ export const commandCategories: CommandCategory[] = [
   },
   {
     name: "System",
-    count: 5,
+    count: 6,
     commands: [
       { id: "hq-sync", description: "Sync modules from manifest" },
       { id: "cleanup", description: "Audit and enforce policies" },
       { id: "search", description: "Search HQ (qmd-powered)" },
       { id: "search-reindex", description: "Reindex (semantic + full-text)" },
       { id: "setup", description: "Interactive setup wizard" },
+      { id: "exit-plan", description: "Force exit plan mode" },
     ],
   },
   {
@@ -225,7 +226,7 @@ export const knowledgeBases = {
     { id: "hq-core", description: "Thread schema, HQ patterns" },
     { id: "dev-team", description: "Dev team patterns" },
     { id: "design-styles", description: "Image generation styles" },
-    { id: "pure-ralph", description: "Pure Ralph orchestration" },
+    { id: "loom", description: "Agent patterns & architecture" },
     { id: "projects", description: "Project templates" },
     { id: "ai-security", description: "Security practices" },
   ],
@@ -239,3 +240,72 @@ export const knowledgeBases = {
     { company: "personal", topics: ["voice", "style"] },
   ],
 };
+
+// ─── INDEX.md System ────────────────────────────────────────────────────────
+
+export interface IndexLocation {
+  path: string;
+  description: string;
+}
+
+export const indexMdLocations: IndexLocation[] = [
+  { path: "projects/INDEX.md", description: "All project PRDs and status" },
+  { path: "workspace/orchestrator/INDEX.md", description: "Ralph loop workflow state" },
+  { path: "companies/*/knowledge/INDEX.md", description: "Company knowledge maps" },
+  { path: "workers/*/INDEX.md", description: "Worker directories" },
+  { path: "knowledge/public/INDEX.md", description: "Public knowledge bases" },
+  { path: "workspace/reports/INDEX.md", description: "Generated reports" },
+];
+
+export const indexMdUpdaters: string[] = [
+  "/checkpoint",
+  "/handoff",
+  "/reanchor",
+  "/prd",
+  "/run-project",
+  "/newworker",
+  "/cleanup --reindex",
+];
+
+// ─── Learning System ────────────────────────────────────────────────────────
+
+export interface LearningTier {
+  tier: string;
+  trigger: string;
+  target: string;
+  priority: string;
+}
+
+export const learningTiers: LearningTier[] = [
+  { tier: "Tier 1", trigger: "/remember (user correction)", target: "Immediate injection into governing file", priority: "Highest" },
+  { tier: "Tier 2", trigger: "/learn (auto-capture post-task)", target: "Classified and injected into relevant file", priority: "High" },
+  { tier: "Tier 3", trigger: "Event log append", target: "workspace/learnings/*.json (analysis/dedup)", priority: "Normal" },
+];
+
+export interface LearningTarget {
+  scope: string;
+  target: string;
+}
+
+export const learningTargets: LearningTarget[] = [
+  { scope: "Worker", target: "worker.yaml instructions: block" },
+  { scope: "Command", target: "command .md ## Rules section" },
+  { scope: "Knowledge", target: "Relevant knowledge file (committed to repo)" },
+  { scope: "Global", target: "CLAUDE.md ## Learned Rules" },
+];
+
+// ─── Knowledge Repos ────────────────────────────────────────────────────────
+
+export interface KnowledgeRepoExample {
+  symlink: string;
+  repo: string;
+  visibility: "public" | "private";
+}
+
+export const knowledgeRepoExamples: KnowledgeRepoExample[] = [
+  { symlink: "knowledge/public/Ralph", repo: "repos/public/ralph-methodology/docs", visibility: "public" },
+  { symlink: "knowledge/public/workers", repo: "repos/public/knowledge-workers", visibility: "public" },
+  { symlink: "knowledge/public/hq-core", repo: "repos/public/knowledge-hq-core", visibility: "public" },
+  { symlink: "companies/company-a/knowledge", repo: "repos/private/knowledge-company-a", visibility: "private" },
+  { symlink: "companies/company-b/knowledge", repo: "repos/private/knowledge-company-b", visibility: "private" },
+];

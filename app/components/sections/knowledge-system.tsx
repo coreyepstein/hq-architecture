@@ -13,7 +13,7 @@ const chart = `graph TD
     hqc["hq-core"]
     dt["dev-team"]
     ds["design-styles"]
-    pr["pure-ralph"]
+    loom["loom"]
     proj["projects"]
     sec["ai-security"]
   end
