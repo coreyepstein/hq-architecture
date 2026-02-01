@@ -1,28 +1,8 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
+import KnowledgeReposDiagram from "@/app/components/diagrams/KnowledgeReposDiagram";
 import { knowledgeRepoExamples } from "@/app/data/hq-data";
-
-const chart = `graph LR
-  subgraph HQ["<b>HQ Git Repo</b>"]
-    K1["knowledge/public/Ralph"]
-    K2["knowledge/public/workers"]
-    CK["companies/company-a/knowledge"]
-  end
-
-  subgraph Repos["<b>Independent Git Repos</b>"]
-    R1["repos/public/<br/>ralph-methodology"]
-    R2["repos/public/<br/>knowledge-workers"]
-    R3["repos/private/<br/>knowledge-company-a"]
-  end
-
-  K1 -.->|symlink| R1
-  K2 -.->|symlink| R2
-  CK -.->|symlink| R3
-
-  style HQ fill:#111113,stroke:#3f3f46,color:#fafafa
-  style Repos fill:#111113,stroke:#3f3f46,color:#fafafa`;
 
 const concepts = [
   {
@@ -50,7 +30,7 @@ export default function KnowledgeReposSection() {
       title="Knowledge Repos"
       subtitle="Every knowledge folder is its own git repo, symlinked into HQ. Independent versioning, sharing, and publishing per knowledge base."
     >
-      <MermaidDiagram chart={chart} />
+      <KnowledgeReposDiagram />
 
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {concepts.map((c) => (

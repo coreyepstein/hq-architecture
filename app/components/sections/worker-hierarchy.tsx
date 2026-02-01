@@ -1,7 +1,7 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
+import WorkerHierarchyDiagram from "@/app/components/diagrams/WorkerHierarchyDiagram";
 import {
   workers,
   workerTypeBgColors,
@@ -9,48 +9,6 @@ import {
   type Team,
   type WorkerType,
 } from "@/app/data/hq-data";
-
-const chart = `graph TD
-  subgraph DevTeam["<b>Dev Team</b> — 12 CodeWorkers"]
-    pm["project-manager"]
-    te["task-executor"]
-    arch["architect"]
-    be["backend-dev"]
-    db["database-dev"]
-    fe["frontend-dev"]
-    infra["infra-dev"]
-    md["motion-designer"]
-    cr["code-reviewer"]
-    kc["knowledge-curator"]
-    pp["product-planner"]
-    dqa["dev-qa-tester"]
-  end
-
-  subgraph ContentTeam["<b>Content Team</b> — 5 ContentWorkers"]
-    cb["content-brand"]
-    cs["content-sales"]
-    cp["content-product"]
-    cl["content-legal"]
-    csh["content-shared"]
-  end
-
-  subgraph Utility["<b>Utility</b> — 3 OpsWorkers"]
-    fd["frontend-designer"]
-    qt["qa-tester"]
-    ss["security-scanner"]
-  end
-
-  subgraph Custom["<b>Custom</b> — You Create These"]
-    yc["your-cfo"]
-    ym["your-cmo"]
-    ya["your-analyst"]
-    ys["your-social"]
-  end
-
-  style DevTeam fill:#111113,stroke:#3f3f46,color:#fafafa
-  style ContentTeam fill:#111113,stroke:#3f3f46,color:#fafafa
-  style Utility fill:#111113,stroke:#3f3f46,color:#fafafa
-  style Custom fill:#111113,stroke:#52525b,color:#a1a1aa`;
 
 const workerTypes: WorkerType[] = ["CodeWorker", "ContentWorker", "SocialWorker", "OpsWorker", "ResearchWorker"];
 const teams: Team[] = ["dev-team", "content-team", "utility", "custom"];
@@ -63,7 +21,7 @@ export default function WorkerHierarchySection() {
       title="Worker Hierarchy"
       subtitle="Specialized AI workers organized into teams. Each has a YAML definition, skills, verification, and state machine lifecycle."
     >
-      <MermaidDiagram chart={chart} />
+      <WorkerHierarchyDiagram />
 
       <div className="mt-8 flex flex-wrap gap-3">
         {workerTypes.map((type) => (

@@ -1,30 +1,8 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
+import IndexMdDiagram from "@/app/components/diagrams/IndexMdDiagram";
 import { indexMdLocations, indexMdUpdaters } from "@/app/data/hq-data";
-
-const chart = `graph TD
-  Root["<b>INDEX.md</b><br/>Root directory map"]
-
-  Root --> P["projects/INDEX.md"]
-  Root --> W["workers/INDEX.md"]
-  Root --> K["knowledge/INDEX.md"]
-  Root --> WS["workspace/INDEX.md"]
-
-  WS --> Orch["orchestrator/INDEX.md"]
-  WS --> Rep["reports/INDEX.md"]
-
-  K --> KPub["public/INDEX.md"]
-
-  style Root fill:#27272a,stroke:#52525b,color:#fafafa
-  style P fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style W fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style K fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style WS fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Orch fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Rep fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style KPub fill:#18181b,stroke:#3f3f46,color:#fafafa`;
 
 export default function IndexMdSystemSection() {
   return (
@@ -34,7 +12,7 @@ export default function IndexMdSystemSection() {
       title="INDEX.md System"
       subtitle="Hierarchical INDEX.md files provide a navigable map of HQ. Commands auto-update them so the map stays current."
     >
-      <MermaidDiagram chart={chart} />
+      <IndexMdDiagram />
 
       <div className="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {indexMdLocations.map((loc) => (

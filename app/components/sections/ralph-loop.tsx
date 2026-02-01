@@ -1,38 +1,7 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
-
-const chart = `flowchart LR
-  PRD["Read PRD"]
-  Pick["Pick Task<br/><i>passes: false</i>"]
-  Spawn["Spawn Agent<br/><i>fresh context</i>"]
-  Exec["Execute Task"]
-  BP["Back Pressure<br/><i>typecheck · build · test</i>"]
-  CP["Checkpoint<br/><i>thread + git</i>"]
-  Update["Update PRD<br/><i>passes: true</i>"]
-  Check{"All tasks<br/>passing?"}
-  Done["Create PR"]
-
-  PRD --> Pick
-  Pick --> Spawn
-  Spawn --> Exec
-  Exec --> BP
-  BP --> CP
-  CP --> Update
-  Update --> Check
-  Check -->|No| Pick
-  Check -->|Yes| Done
-
-  style PRD fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Pick fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Spawn fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Exec fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style BP fill:#18181b,stroke:#52525b,color:#fafafa
-  style CP fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Update fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Check fill:#18181b,stroke:#52525b,color:#fafafa
-  style Done fill:#27272a,stroke:#52525b,color:#fafafa`;
+import RalphLoopDiagram from "@/app/components/diagrams/RalphLoopDiagram";
 
 const principles = [
   {
@@ -69,7 +38,7 @@ export default function RalphLoopSection() {
       title="The Ralph Loop"
       subtitle="Simple for-loop orchestration: read PRD, pick task, spawn fresh agent, execute, verify, checkpoint, repeat."
     >
-      <MermaidDiagram chart={chart} />
+      <RalphLoopDiagram />
 
       <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {principles.map((p) => (

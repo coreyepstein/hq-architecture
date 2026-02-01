@@ -1,29 +1,7 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
-
-const chart = `sequenceDiagram
-  participant U as User
-  participant O as Orchestrator
-  participant W as Worker
-  participant G as Git
-  participant T as Threads
-
-  U->>O: /run worker skill
-  O->>W: Load context + execute
-  W->>W: Execute skill
-  W->>G: Commit changes
-  G-->>W: commit hash
-  W->>T: Save thread JSON
-  T-->>O: Checkpoint available
-  O-->>U: Result + thread ID
-
-  Note over U,T: Session Resume
-  U->>O: /reanchor or /handoff
-  O->>T: Load latest thread
-  T-->>O: Git state + worker state
-  O-->>U: Context restored`;
+import ThreadLifecycleDiagram from "@/app/components/diagrams/ThreadLifecycleDiagram";
 
 const threadFields = [
   { field: "thread_id", example: "T-20260123-143052-slug", description: "Unique timestamped identifier" },
@@ -43,7 +21,7 @@ export default function ThreadLifecycleSection() {
       title="Thread Lifecycle"
       subtitle="Sessions are captured as thread JSON files with full git context, worker state, and continuation hints."
     >
-      <MermaidDiagram chart={chart} />
+      <ThreadLifecycleDiagram />
 
       <div className="mt-8">
         <h3 className="mb-4 font-mono text-sm font-semibold text-text-secondary">

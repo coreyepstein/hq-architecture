@@ -1,32 +1,7 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
-
-const chart = `flowchart TD
-  Input["<b>Inputs</b><br/>string · number · boolean<br/>array · date · path"]
-  Worker["<b>Worker + Skill</b><br/>worker.yaml config<br/>skills/*.md instructions"]
-  Verify["<b>Verification</b><br/>Shell commands with must_pass"]
-  Output["<b>Outputs</b><br/>markdown · json · file<br/>git_commit · console"]
-
-  Input --> Worker
-  Worker --> Verify
-  Verify --> Output
-
-  Worker --> Mutating{"mutating?"}
-  Mutating -->|"true"| Hook["PostToolsHook<br/><i>auto-checkpoint</i><br/><i>log metrics</i><br/><i>save thread</i>"]
-  Mutating -->|"false"| ReadOnly["Read-only<br/><i>no side effects</i>"]
-
-  Hook --> Output
-  ReadOnly --> Output
-
-  style Input fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Worker fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Verify fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Output fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Mutating fill:#18181b,stroke:#52525b,color:#fafafa
-  style Hook fill:#18181b,stroke:#52525b,color:#fafafa
-  style ReadOnly fill:#18181b,stroke:#3f3f46,color:#a1a1aa`;
+import SkillExecutionDiagram from "@/app/components/diagrams/SkillExecutionDiagram";
 
 const schemaFields = [
   { field: "id", type: "string", description: "Unique skill identifier" },
@@ -44,7 +19,7 @@ export default function SkillExecutionSection() {
       title="Skill Execution Flow"
       subtitle="Skills are atomic, verifiable operations with typed inputs and outputs. Mutating skills trigger automatic state management."
     >
-      <MermaidDiagram chart={chart} />
+      <SkillExecutionDiagram />
 
       <div className="mt-8">
         <h3 className="mb-4 font-mono text-sm font-semibold text-text-secondary">

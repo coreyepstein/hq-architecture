@@ -1,22 +1,7 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
-
-const chart = `stateDiagram-v2
-  [*] --> idle
-  idle --> loading: skill_requested
-  loading --> planning: context_loaded
-  loading --> error: load_failed
-  planning --> executing: plan_ready
-  executing --> verifying: execution_done
-  executing --> error: execution_failed
-  verifying --> post_hook: verification_passed
-  verifying --> error: verification_failed
-  post_hook --> completed: hook_complete
-  error --> loading: retry
-  error --> completed: max_retries
-  completed --> [*]`;
+import StateMachineDiagram from "@/app/components/diagrams/StateMachineDiagram";
 
 const states = [
   { name: "idle", description: "Worker registered, awaiting invocation" },
@@ -37,7 +22,7 @@ export default function WorkerStateMachineSection() {
       title="Worker State Machine"
       subtitle="Every worker follows the same lifecycle: load context, plan, execute, verify, checkpoint."
     >
-      <MermaidDiagram chart={chart} />
+      <StateMachineDiagram />
 
       <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         {states.map((state) => (

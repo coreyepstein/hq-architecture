@@ -1,29 +1,8 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
+import LearningSystemDiagram from "@/app/components/diagrams/LearningSystemDiagram";
 import { learningTiers, learningTargets } from "@/app/data/hq-data";
-
-const chart = `flowchart TD
-  Task["Task Execution"]
-  Remember["<b>/remember</b><br/>User correction"]
-  Learn["<b>/learn</b><br/>Auto-capture"]
-  Classify["Classify Scope<br/><i>worker · command · knowledge · global</i>"]
-  Inject["Inject Rule<br/><i>into governing file</i>"]
-  Log["Event Log<br/><i>workspace/learnings/*.json</i>"]
-
-  Task --> Learn
-  Remember --> Learn
-  Learn --> Classify
-  Classify --> Inject
-  Classify --> Log
-
-  style Task fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Learn fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Remember fill:#18181b,stroke:#52525b,color:#fafafa
-  style Classify fill:#18181b,stroke:#3f3f46,color:#fafafa
-  style Inject fill:#27272a,stroke:#52525b,color:#fafafa
-  style Log fill:#18181b,stroke:#3f3f46,color:#a1a1aa`;
 
 export default function LearningSystemSection() {
   return (
@@ -33,7 +12,7 @@ export default function LearningSystemSection() {
       title="Learning System"
       subtitle="Rules are captured from task execution and injected directly into the files they govern. The system gets smarter with every session."
     >
-      <MermaidDiagram chart={chart} />
+      <LearningSystemDiagram />
 
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {learningTiers.map((t) => (

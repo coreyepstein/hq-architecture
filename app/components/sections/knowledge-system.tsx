@@ -1,42 +1,8 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
+import KnowledgeSystemDiagram from "@/app/components/diagrams/KnowledgeSystemDiagram";
 import { knowledgeBases } from "@/app/data/hq-data";
-
-const chart = `graph TD
-  Search["<b>qmd Search</b><br/>BM25 · Semantic · Hybrid"]
-
-  subgraph Public["<b>Public Knowledge</b>"]
-    ralph["Ralph"]
-    wk["workers"]
-    hqc["hq-core"]
-    dt["dev-team"]
-    ds["design-styles"]
-    loom["loom"]
-    proj["projects"]
-    sec["ai-security"]
-  end
-
-  subgraph Private["<b>Private Knowledge</b>"]
-    yt["your-tools"]
-    yd["your-domain"]
-  end
-
-  subgraph Company["<b>Company Knowledge</b>"]
-    c1k["company-a/<br/><i>metrics · schema</i>"]
-    c2k["company-b/<br/><i>brand · products</i>"]
-    pk["personal/<br/><i>voice · style</i>"]
-  end
-
-  Search --> Public
-  Search --> Private
-  Search --> Company
-
-  style Search fill:#27272a,stroke:#52525b,color:#fafafa
-  style Public fill:#111113,stroke:#3f3f46,color:#fafafa
-  style Private fill:#111113,stroke:#3f3f46,color:#fafafa
-  style Company fill:#111113,stroke:#3f3f46,color:#fafafa`;
 
 const searchModes = [
   { mode: "qmd search", type: "BM25 keyword", description: "Fast exact-match keyword search across all HQ content", speed: "Fast" },
@@ -52,7 +18,7 @@ export default function KnowledgeSystemSection() {
       title="Knowledge System"
       subtitle="Three-tier knowledge architecture with semantic search. Workers load relevant knowledge automatically from their context.base paths."
     >
-      <MermaidDiagram chart={chart} />
+      <KnowledgeSystemDiagram />
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {searchModes.map((s) => (

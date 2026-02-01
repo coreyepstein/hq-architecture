@@ -1,30 +1,8 @@
 "use client";
 
 import SectionWrapper from "@/app/components/section-wrapper";
-import MermaidDiagram from "@/app/components/mermaid-diagram";
+import CompanyIsolationDiagram from "@/app/components/diagrams/CompanyIsolationDiagram";
 import { companies } from "@/app/data/hq-data";
-
-const chart = `graph LR
-  subgraph CompanyA["<b>Company A</b>"]
-    a_s["settings/"]
-    a_d["data/"]
-    a_k["knowledge/"]
-  end
-
-  subgraph CompanyB["<b>Company B</b>"]
-    b_s["settings/"]
-    b_d["data/"]
-    b_k["knowledge/"]
-  end
-
-  subgraph Personal["<b>Personal</b>"]
-    p_s["settings/"]
-    p_k["knowledge/"]
-  end
-
-  style CompanyA fill:#111113,stroke:#3f3f46,color:#fafafa
-  style CompanyB fill:#111113,stroke:#3f3f46,color:#fafafa
-  style Personal fill:#111113,stroke:#3f3f46,color:#fafafa`;
 
 export default function CompanyIsolationSection() {
   return (
@@ -34,7 +12,7 @@ export default function CompanyIsolationSection() {
       title="Company Isolation"
       subtitle="Each company owns its own settings, data, and knowledge — fully isolated contexts with dedicated credentials."
     >
-      <MermaidDiagram chart={chart} />
+      <CompanyIsolationDiagram />
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {companies.map((company) => (

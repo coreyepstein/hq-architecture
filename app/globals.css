@@ -36,12 +36,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Mermaid overrides */
-.mermaid-wrapper svg {
-  max-width: 100%;
-  height: auto;
-}
-
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
