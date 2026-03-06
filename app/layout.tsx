@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
   variable: "--font-mono",
 });
 
-const siteUrl = "https://hq.getindigo.ai";
+const siteUrl = "https://hq-cli.getindigo.ai";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

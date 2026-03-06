@@ -15,12 +15,14 @@ import LearningSystemSection from "@/app/components/sections/learning-system";
 import KnowledgeSystemSection from "@/app/components/sections/knowledge-system";
 import KnowledgeReposSection from "@/app/components/sections/knowledge-repos";
 import HowItWorksSection from "@/app/components/sections/how-it-works";
+import InstallSection from "@/app/components/sections/install";
 import GetStartedSection from "@/app/components/sections/get-started";
 import FooterSection from "@/app/components/sections/footer";
 
 const navItems = [
   // Overview
   { id: "what-is-hq", label: "What is HQ?", group: "overview" },
+  { id: "install", label: "Install", group: "overview" },
   { id: "how-it-works", label: "How It Works", group: "overview" },
   { id: "use-cases", label: "Use Cases", group: "overview" },
   // Architecture
@@ -69,6 +71,7 @@ export default function Home() {
       {/* ─── Overview ─── */}
       <HeroSection />
       <WhatIsHqSection />
+      <InstallSection />
       <StatsBar />
       <HowItWorksSection />
       <UseCasesSection />

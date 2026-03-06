@@ -1,9 +1,9 @@
 "use client";
 
 const footerLinks = [
-  { label: "Starter Kit", href: "https://github.com/coreyepstein/hq-starter-kit" },
+  { label: "GitHub", href: "https://github.com/indigoai-us/hq" },
+  { label: "npx create-hq", href: "https://www.npmjs.com/package/create-hq" },
   { label: "Ralph Method", href: "https://github.com/coreyepstein/ralph-methodology" },
-  { label: "HQ CLI", href: "https://github.com/coreyepstein/hq-cli" },
   { label: "Indigo", href: "https://getindigo.ai" },
 ];
 

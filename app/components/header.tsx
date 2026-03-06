@@ -7,6 +7,7 @@ const navGroups = [
     label: "Overview",
     items: [
       { id: "what-is-hq", label: "What is HQ?" },
+      { id: "install", label: "Install" },
       { id: "use-cases", label: "Use Cases" },
     ],
   },
@@ -76,12 +77,10 @@ export default function Header() {
             </div>
           ))}
           <a
-            href="https://github.com/coreyepstein/hq-starter-kit"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#install"
             className="rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 font-mono text-xs text-text-primary transition-all hover:bg-accent/20"
           >
-            Get Started
+            npx create-hq
           </a>
         </nav>
 
@@ -125,12 +124,11 @@ export default function Header() {
               </div>
             ))}
             <a
-              href="https://github.com/coreyepstein/hq-starter-kit"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#install"
+              onClick={() => setMobileOpen(false)}
               className="mt-2 inline-block rounded-full border border-accent/30 bg-accent/10 px-4 py-2 font-mono text-xs text-text-primary"
             >
-              Get Started
+              npx create-hq
             </a>
           </div>
         </div>
