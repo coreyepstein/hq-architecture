@@ -56,7 +56,7 @@ export default function Header() {
         </a>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {navGroups.map((group) => (
             <div key={group.label} className="group relative">
               <button className="font-mono text-xs tracking-wider text-text-muted transition-colors hover:text-text-secondary">
@@ -88,7 +88,7 @@ export default function Header() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex flex-col gap-1 md:hidden"
+          className="flex flex-col gap-1 lg:hidden"
           aria-label="Toggle menu"
         >
           <span
@@ -105,7 +105,7 @@ export default function Header() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-border bg-bg/95 backdrop-blur-xl md:hidden">
+        <div className="border-t border-border bg-bg/95 backdrop-blur-xl lg:hidden">
           <div className="mx-auto max-w-6xl px-5 py-4">
             {navGroups.map((group) => (
               <div key={group.label} className="mb-4">
