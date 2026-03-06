@@ -23,6 +23,13 @@ export const metadata: Metadata = {
   title: "HQ — Your Personal OS for AI",
   description:
     "Orchestrate work across companies, workers, and AI from a single terminal. Built for Claude Code.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "HQ — Your Personal OS for AI",
     description:
@@ -30,12 +37,21 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: "HQ",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "HQ — Your Personal OS for AI",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "HQ — Your Personal OS for AI",
     description:
       "Orchestrate work across companies, workers, and AI from a single terminal. Built for Claude Code.",
+    images: ["/og.png"],
   },
   alternates: {
     canonical: siteUrl,
