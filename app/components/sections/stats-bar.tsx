@@ -10,6 +10,7 @@ export default function StatsBar() {
         {stats.map((stat) => (
           <StatCard
             key={stat.label}
+            value={stat.value}
             label={stat.label}
             description={stat.description}
           />

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
+import { ScanLines } from "@/app/components/scan-lines";
+import Header from "@/app/components/header";
 import "./globals.css";
 
 const inter = Inter({
@@ -13,20 +15,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HQ Architecture",
+  title: "HQ — Your Personal OS for AI",
   description:
-    "A personal OS for orchestrating work across companies, workers, and AI.",
+    "Orchestrate work across companies, workers, and AI from a single terminal. Built for Claude Code.",
   openGraph: {
-    title: "HQ Architecture",
+    title: "HQ — Your Personal OS for AI",
     description:
-      "A personal OS for orchestrating work across companies, workers, and AI.",
+      "Orchestrate work across companies, workers, and AI from a single terminal. Built for Claude Code.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "HQ Architecture",
+    title: "HQ — Your Personal OS for AI",
     description:
-      "A personal OS for orchestrating work across companies, workers, and AI.",
+      "Orchestrate work across companies, workers, and AI from a single terminal. Built for Claude Code.",
   },
 };
 
@@ -37,7 +39,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`dark ${inter.variable} ${geistMono.variable}`}>
-      <body className="min-h-screen bg-bg antialiased">{children}</body>
+      <body className="min-h-screen bg-bg antialiased">
+        <ScanLines opacity={2} spacing={3} />
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }

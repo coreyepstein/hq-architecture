@@ -30,6 +30,7 @@ export interface CommandCategory {
 }
 
 export interface Stat {
+  value: string;
   label: string;
   description: string;
 }
@@ -37,11 +38,11 @@ export interface Stat {
 // ─── Stats ───────────────────────────────────────────────────────────────────
 
 export const stats: Stat[] = [
-  { label: "Companies", description: "Isolated business contexts" },
-  { label: "Workers", description: "Specialized AI agents" },
-  { label: "Commands", description: "Slash command skills" },
-  { label: "Projects", description: "PRD-driven execution" },
-  { label: "Knowledge Bases", description: "Searchable context" },
+  { value: "16", label: "Companies", description: "Isolated business contexts" },
+  { value: "40+", label: "Workers", description: "Specialized AI agents" },
+  { value: "35", label: "Commands", description: "Slash command skills" },
+  { value: "50+", label: "Projects", description: "PRD-driven execution" },
+  { value: "17", label: "Knowledge Bases", description: "Searchable context" },
 ];
 
 // ─── Companies ───────────────────────────────────────────────────────────────
@@ -182,19 +183,19 @@ export const commandCategories: CommandCategory[] = [
 // ─── Worker Type Colors ──────────────────────────────────────────────────────
 
 export const workerTypeColors: Record<WorkerType, string> = {
-  CodeWorker: "text-text-secondary",
-  ContentWorker: "text-text-secondary",
-  SocialWorker: "text-text-secondary",
-  OpsWorker: "text-text-secondary",
-  ResearchWorker: "text-text-secondary",
+  CodeWorker: "text-indigo",
+  ContentWorker: "text-amber",
+  SocialWorker: "text-cyan",
+  OpsWorker: "text-green",
+  ResearchWorker: "text-blue",
 };
 
 export const workerTypeBgColors: Record<WorkerType, string> = {
-  CodeWorker: "bg-white/5 border-white/10",
-  ContentWorker: "bg-white/5 border-white/10",
-  SocialWorker: "bg-white/5 border-white/10",
-  OpsWorker: "bg-white/5 border-white/10",
-  ResearchWorker: "bg-white/5 border-white/10",
+  CodeWorker: "bg-indigo/5 border-indigo/15",
+  ContentWorker: "bg-amber/5 border-amber/15",
+  SocialWorker: "bg-cyan/5 border-cyan/15",
+  OpsWorker: "bg-green/5 border-green/15",
+  ResearchWorker: "bg-blue/5 border-blue/15",
 };
 
 export const teamLabels: Record<Team, string> = {
