@@ -16,13 +16,13 @@ const geistMono = Geist_Mono({
   variable: "--font-mono",
 });
 
-const siteUrl = "https://hq-cli.getindigo.ai";
+const siteUrl = "https://hq.getindigo.ai";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "HQ — Your Personal OS for AI",
+  title: "HQ — Open-Source AI Dev Team for Claude Code",
   description:
-    "Orchestrate work across companies, workers, and AI from a single terminal. Built for Claude Code.",
+    "45 AI workers, 60+ skills, and an orchestrator that ships your code autonomously. Install in 5 minutes with npx create-hq.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "HQ — Your Personal OS for AI",
+    title: "HQ — Open-Source AI Dev Team for Claude Code",
     description:
-      "Orchestrate work across companies, workers, and AI from a single terminal. Built for Claude Code.",
+      "45 AI workers, 60+ skills, and an orchestrator that ships your code autonomously. Install in 5 minutes with npx create-hq.",
     type: "website",
     url: siteUrl,
     siteName: "HQ",
@@ -42,15 +42,15 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "HQ — Your Personal OS for AI",
+        alt: "HQ — Open-Source AI Dev Team for Claude Code",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "HQ — Your Personal OS for AI",
+    title: "HQ — Open-Source AI Dev Team for Claude Code",
     description:
-      "Orchestrate work across companies, workers, and AI from a single terminal. Built for Claude Code.",
+      "45 AI workers, 60+ skills, and an orchestrator that ships your code autonomously. Install in 5 minutes with npx create-hq.",
     images: ["/og.png"],
   },
   alternates: {
@@ -75,7 +75,7 @@ export default function RootLayout({
               name: "HQ",
               applicationCategory: "DeveloperApplication",
               description:
-                "A personal OS for orchestrating work across companies, workers, and AI. Built for Claude Code.",
+                "Open-source AI dev team for Claude Code. 45 workers, 60+ skills, and an orchestrator that ships code autonomously.",
               url: siteUrl,
               operatingSystem: "Cross-platform",
               offers: {

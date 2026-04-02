@@ -19,7 +19,7 @@ export default function HeroSection() {
         className="relative z-10"
       >
         <span className="mb-6 inline-block rounded-full border border-accent/20 bg-accent-glow px-4 py-1.5 font-mono text-xs tracking-widest text-accent">
-          PERSONAL OS FOR AI
+          OPEN-SOURCE AI DEV TEAM
         </span>
 
         <h1 className="font-mono text-6xl font-bold tracking-tighter text-text-primary md:text-8xl lg:text-9xl">
@@ -27,15 +27,15 @@ export default function HeroSection() {
         </h1>
 
         <p className="mx-auto mt-6 max-w-xl text-xl leading-relaxed text-text-secondary md:text-2xl">
-          Orchestrate work across companies, workers, and AI — from a single
-          terminal.
+          45 AI workers, 60+ skills, and an orchestrator that ships your code
+          autonomously.
         </p>
 
         <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-text-muted">
           Built for{" "}
-          <span className="text-accent">Claude Code</span>. Structure your
-          context, define specialized workers, and let the Ralph loop execute
-          your projects.
+          <span className="text-accent">Claude Code</span>. Install in 5
+          minutes. Plan a project, run the Ralph loop, and deploy — without
+          writing a line of code.
         </p>
 
         {/* CTA buttons */}
@@ -69,6 +69,14 @@ export default function HeroSection() {
             className="inline-flex items-center gap-2 rounded-full border border-border-accent px-6 py-2.5 font-mono text-sm text-text-secondary transition-all hover:border-accent/30 hover:text-text-primary"
           >
             Learn More
+          </a>
+          <a
+            href="https://empire.institute"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-indigo/30 bg-indigo/10 px-6 py-2.5 font-mono text-sm text-text-secondary transition-all hover:bg-indigo/20 hover:border-indigo/50 hover:text-text-primary"
+          >
+            Learn HQ
           </a>
         </motion.div>
       </motion.div>

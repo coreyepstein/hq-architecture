@@ -4,6 +4,7 @@ const footerLinks = [
   { label: "GitHub", href: "https://github.com/indigoai-us/hq" },
   { label: "npx create-hq", href: "https://www.npmjs.com/package/create-hq" },
   { label: "Ralph Method", href: "https://github.com/coreyepstein/ralph-methodology" },
+  { label: "Empire Institute", href: "https://empire.institute" },
   { label: "Indigo", href: "https://getindigo.ai" },
 ];
 
@@ -17,7 +18,7 @@ export default function FooterSection() {
               HQ
             </span>
             <p className="mt-1 text-xs text-text-muted">
-              Your Personal OS for AI
+              Open-source AI dev team for Claude Code
             </p>
           </div>
 
