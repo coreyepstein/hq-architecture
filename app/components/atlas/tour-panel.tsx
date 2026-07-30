@@ -6,6 +6,7 @@ import {
   Grid3X3,
   Presentation
 } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { ecosystem } from "@/app/data/ecosystem";
 
 interface TourPanelProps {
@@ -64,6 +65,7 @@ export function TourPanel({
           type="button"
           onClick={onToggleOverview}
           aria-pressed={overviewOpen}
+          data-tour-overview-trigger
         >
           <Grid3X3 size={15} />
           SCENES
@@ -101,12 +103,40 @@ export function TourOverview({
   onSelect,
   onClose
 }: TourOverviewProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+    if (dialog && !dialog.open) {
+      dialog.showModal();
+      closeButtonRef.current?.focus();
+    }
+
+    return () => {
+      if (dialog?.open) dialog.close();
+      const focusTarget =
+        previousFocusRef.current &&
+        previousFocusRef.current !== document.body
+          ? previousFocusRef.current
+          : document.querySelector<HTMLButtonElement>(
+              "[data-tour-overview-trigger]"
+            );
+      focusTarget?.focus();
+    };
+  }, []);
+
   return (
-    <div
+    <dialog
+      ref={dialogRef}
       className="atlas-tour-overview"
-      role="dialog"
-      aria-modal="true"
       aria-label="Tour scene overview"
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
     >
       <button
         className="atlas-tour-overview__backdrop"
@@ -120,7 +150,12 @@ export function TourOverview({
             <span className="atlas-label">BRIEFING INDEX</span>
             <h2>Choose a scene</h2>
           </div>
-          <button type="button" onClick={onClose}>
+          <button
+            ref={closeButtonRef}
+            type="button"
+            onClick={onClose}
+            autoFocus
+          >
             CLOSE
           </button>
         </div>
@@ -139,6 +174,6 @@ export function TourOverview({
           ))}
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

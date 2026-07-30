@@ -54,7 +54,6 @@ export function CapabilityNode({
       ]
         .filter(Boolean)
         .join(" ")}
-      role="group"
       aria-label={`${capability.label}. ${capability.summary}`}
       aria-pressed={selected}
       onClick={() => data.onActivate(capability.id)}
@@ -99,7 +98,9 @@ export function ZoneNode({ data }: NodeProps<ZoneFlowNode>) {
         <strong>{data.zone.label}</strong>
         <small>{data.zone.description}</small>
       </div>
-      <div className="atlas-zone__index">{data.zone.id.slice(-1).toUpperCase()}</div>
+      <div className="atlas-zone__index">
+        {data.zone.id.split(".").at(-1)?.slice(0, 2).toUpperCase()}
+      </div>
     </div>
   );
 }

@@ -69,28 +69,44 @@ function relationHandles(relation: Relation) {
     : { sourceHandle: "source-top", targetHandle: "target-bottom" };
 }
 
-function FocusCamera({ focusIds }: { focusIds: string[] }) {
+function FocusCamera({
+  focusIds,
+  selectedId
+}: {
+  focusIds: string[];
+  selectedId: string;
+}) {
   const { fitView, getNodes } = useReactFlow();
-  const focusKey = focusIds.join("|");
+  const compact =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 800px)").matches;
+  const focusKey =
+    focusIds.length > 0
+      ? focusIds.join("|")
+      : compact
+        ? selectedId
+        : "overview";
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
       const allNodes = getNodes();
-      const focusNodes = focusIds.length
-        ? allNodes.filter((node) => focusIds.includes(node.id))
+      const targetIds =
+        focusKey === "overview" ? [] : focusKey.split("|");
+      const focusNodes = targetIds.length
+        ? allNodes.filter((node) => targetIds.includes(node.id))
         : allNodes.filter((node) => node.type === "zone");
 
       if (!focusNodes.length) return;
       void fitView({
         nodes: focusNodes,
-        padding: focusIds.length ? 0.28 : 0.08,
+        padding: targetIds.length === 1 ? 1.2 : targetIds.length ? 0.28 : 0.08,
         duration: 700,
-        maxZoom: focusIds.length <= 3 ? 1.04 : 0.82
+        maxZoom: targetIds.length <= 3 ? 1.04 : 0.82
       });
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [fitView, focusIds, focusKey, getNodes]);
+  }, [fitView, focusKey, getNodes]);
 
   return null;
 }
@@ -181,7 +197,7 @@ function EcosystemGraphInner({
           hidden: !activeProducts.has(capability.product),
           selectable: true,
           draggable: false,
-          focusable: true,
+          focusable: false,
           ariaLabel: `${capability.label}. ${capability.summary}`,
           zIndex: capability.focal ? 3 : 2
         };
@@ -258,11 +274,7 @@ function EcosystemGraphInner({
             fillOpacity: 0.94
           },
           labelBgPadding: [5, 3],
-          labelBgBorderRadius: 2,
-          pathOptions: {
-            borderRadius: 8,
-            offset: 24
-          }
+          labelBgBorderRadius: 2
         };
       }),
     [activeProducts, focusSet, selectedId]
@@ -285,7 +297,7 @@ function EcosystemGraphInner({
         nodesConnectable={false}
         edgesFocusable={false}
         panOnDrag
-        panOnScroll
+        panOnScroll={false}
         zoomOnScroll
         zoomOnPinch
         zoomOnDoubleClick={false}
@@ -321,7 +333,7 @@ function EcosystemGraphInner({
           }
           maskColor="var(--atlas-minimap-mask)"
         />
-        <FocusCamera focusIds={focusIds} />
+        <FocusCamera focusIds={focusIds} selectedId={selectedId} />
       </ReactFlow>
       <div className="atlas-canvas__hint" aria-hidden="true">
         DRAG TO PAN · SCROLL TO ZOOM · SELECT A SYSTEM

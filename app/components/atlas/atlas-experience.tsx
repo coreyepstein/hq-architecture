@@ -28,6 +28,10 @@ import { NodeInspector } from "./node-inspector";
 import { TourOverview, TourPanel } from "./tour-panel";
 
 type AtlasView = "map" | "tour" | "catalog";
+type AtlasRoute =
+  | { view: "map"; selectedId: string }
+  | { view: "catalog"; selectedId: string }
+  | { view: "tour"; tourIndex: number };
 
 const allProducts = new Set<Product>(products);
 
@@ -47,7 +51,18 @@ function atlasHash(view: AtlasView, selectedId: string, tourIndex: number) {
   return `#atlas/${selectedId}`;
 }
 
-function parseHash() {
+function writeHash(
+  nextView: AtlasView,
+  nextSelectedId: string,
+  nextTourIndex: number
+) {
+  const nextHash = atlasHash(nextView, nextSelectedId, nextTourIndex);
+  if (window.location.hash !== nextHash) {
+    window.history.replaceState(null, "", nextHash);
+  }
+}
+
+function parseHash(): AtlasRoute | null {
   if (typeof window === "undefined") return null;
   const [route, id] = window.location.hash.replace(/^#/, "").split("/");
   if (route === "tour") {
@@ -57,13 +72,13 @@ function parseHash() {
   if (route === "catalog") {
     return {
       view: "catalog" as const,
-      selectedId: capabilityById.has(id) ? id : "core.kernel"
+      selectedId: id && capabilityById.has(id) ? id : "core.kernel"
     };
   }
   if (route === "atlas") {
     return {
       view: "map" as const,
-      selectedId: capabilityById.has(id) ? id : "core.kernel"
+      selectedId: id && capabilityById.has(id) ? id : "core.kernel"
     };
   }
   return null;
@@ -88,24 +103,6 @@ export function AtlasExperience() {
   const [tourOverviewOpen, setTourOverviewOpen] = useState(false);
   const [mobileInspectorOpen, setMobileInspectorOpen] = useState(false);
 
-  const writeHash = useCallback(
-    (
-      nextView: AtlasView,
-      nextSelectedId = selectedId,
-      nextTourIndex = tourIndex
-    ) => {
-      const nextHash = atlasHash(
-        nextView,
-        nextSelectedId,
-        nextTourIndex
-      );
-      if (window.location.hash !== nextHash) {
-        window.history.replaceState(null, "", nextHash);
-      }
-    },
-    [selectedId, tourIndex]
-  );
-
   useEffect(() => {
     const syncFromHash = () => {
       const parsed = parseHash();
@@ -125,7 +122,7 @@ export function AtlasExperience() {
     syncFromHash();
     window.addEventListener("hashchange", syncFromHash);
     return () => window.removeEventListener("hashchange", syncFromHash);
-  }, [writeHash]);
+  }, []);
 
   const changeView = useCallback(
     (nextView: AtlasView) => {
@@ -140,7 +137,7 @@ export function AtlasExperience() {
       }
       writeHash(nextView, selectedId, tourIndex);
     },
-    [selectedId, tourIndex, writeHash]
+    [selectedId, tourIndex]
   );
 
   const selectCapability = useCallback(
@@ -149,11 +146,12 @@ export function AtlasExperience() {
       setMobileInspectorOpen(true);
       if (view !== "tour") writeHash(view, id, tourIndex);
     },
-    [tourIndex, view, writeHash]
+    [tourIndex, view]
   );
 
   const changeTour = useCallback(
     (index: number) => {
+      const restoreOverviewFocus = tourOverviewOpen;
       const nextIndex = Math.max(
         0,
         Math.min(ecosystem.tour.length - 1, index)
@@ -163,9 +161,25 @@ export function AtlasExperience() {
       setSelectedId(firstFocus);
       setTourOverviewOpen(false);
       writeHash("tour", firstFocus, nextIndex);
+      if (restoreOverviewFocus) {
+        window.requestAnimationFrame(() => {
+          document
+            .querySelector<HTMLButtonElement>("[data-tour-overview-trigger]")
+            ?.focus();
+        });
+      }
     },
-    [writeHash]
+    [tourOverviewOpen]
   );
+
+  const closeTourOverview = useCallback(() => {
+    setTourOverviewOpen(false);
+    window.requestAnimationFrame(() => {
+      document
+        .querySelector<HTMLButtonElement>("[data-tour-overview-trigger]")
+        ?.focus();
+    });
+  }, []);
 
   useEffect(() => {
     if (view !== "tour") return;
@@ -448,7 +462,7 @@ export function AtlasExperience() {
         <TourOverview
           currentIndex={tourIndex}
           onSelect={changeTour}
-          onClose={() => setTourOverviewOpen(false)}
+          onClose={closeTourOverview}
         />
       )}
     </div>
