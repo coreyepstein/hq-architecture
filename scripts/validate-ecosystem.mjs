@@ -183,7 +183,7 @@ const connected = new Set(
   model.relations.flatMap((relation) => [relation.source, relation.target])
 );
 for (const capability of model.capabilities) {
-  if (!connected.has(capability.id)) {
+  if (!connected.has(capability.id) && capability.independent !== true) {
     errors.push(`Orphan capability: ${capability.id}`);
   }
 }

@@ -79,6 +79,7 @@ export interface Capability {
   sources: string[];
   tags: string[];
   focal?: boolean;
+  independent?: boolean;
 }
 
 export interface Relation {
