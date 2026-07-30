@@ -1613,12 +1613,19 @@ select:focus-visible {
     width: min(370px, 92vw);
     border-left: 1px solid var(--atlas-border-strong);
     box-shadow: -18px 0 50px rgba(0, 0, 0, 0.45);
+    visibility: hidden;
+    pointer-events: none;
     transform: translateX(101%);
-    transition: transform 220ms ease;
+    transition:
+      transform 220ms ease,
+      visibility 0s linear 220ms;
   }
 
   .atlas-inspector-wrap.is-open {
+    visibility: visible;
+    pointer-events: auto;
     transform: translateX(0);
+    transition-delay: 0s;
   }
 
   .atlas-brand {
@@ -1730,7 +1737,7 @@ select:focus-visible {
 
   .atlas-app--tour .atlas-sidebar {
     display: block;
-    max-height: 230px;
+    max-height: 260px;
   }
 
   .atlas-tour-panel {
@@ -1767,7 +1774,10 @@ select:focus-visible {
   }
 
   .atlas-tour-panel__body p:not(.atlas-tour-panel__claim) {
-    display: none;
+    display: block;
+    max-width: 88%;
+    font-size: 9px;
+    line-height: 1.45;
   }
 
   .atlas-tour-panel__progress {
